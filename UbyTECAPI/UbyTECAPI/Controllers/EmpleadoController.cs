@@ -6,8 +6,9 @@ using System.Runtime.CompilerServices;
 
 namespace UbyTECAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("Empleado")]
+    
     public class EmpleadoController : ControllerBase
     {
 
@@ -18,9 +19,10 @@ namespace UbyTECAPI.Controllers
         }
 
         [HttpGet]
+        [Route("/get")]
         public JsonResult Get()
         {
-            string query = @"select * from Empleado";
+            string query = @"select * from Empleado;";
 
             DataTable table = new DataTable();
 
@@ -40,6 +42,7 @@ namespace UbyTECAPI.Controllers
                     myCon.Close();
                 }
             }
+
 
             return new JsonResult(table);
 
