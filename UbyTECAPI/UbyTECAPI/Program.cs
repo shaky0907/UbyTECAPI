@@ -13,8 +13,6 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddCors(options => {
-
-
     options.AddDefaultPolicy(
         policy =>
         {
@@ -44,5 +42,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors();
 
 app.Run();

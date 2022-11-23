@@ -63,7 +63,17 @@ namespace UbyTECAPI.Controllers
             string json3 = JsonConvert.SerializeObject(table3);
             List<Telefonos_afiliado> tel_af = JsonConvert.DeserializeObject<List<Telefonos_afiliado>>(json3);
 
-            return tel_af[0].telefono;
+            try
+            {
+                return tel_af[0].telefono;
+            }
+            catch (Exception)
+            {
+                return "";
+                throw;
+            }
+            
+            
         }
 
 
@@ -177,10 +187,13 @@ namespace UbyTECAPI.Controllers
         [Route("update")]
         public JsonResult Put(Afiliado adm)
         {
+
+
+
             string query = @"
                     update afiliado set 
                     cedula_a = '" + adm.AdminID + @"',
-                    id_tipo = " + adm.Type.ToString() + @",
+                    id_tipo = " + adm.Type + @",
                     nombre = '" + adm.Name + @"',
                     correo = '" + adm.Email + @"',
                     sinpe = '" + adm.SINPE + @"',
@@ -188,7 +201,7 @@ namespace UbyTECAPI.Controllers
                     provincia = '" + adm.Province + @"',
                     canton = '" + adm.Canton + @"',
                     distrito = '" + adm.District + @"'
-                    where cedula = '" + adm.ID + @"'
+                    where cedula_j = '" + adm.ID + @"'
                     ";
 
             DataTable table = execquery(query);
