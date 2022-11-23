@@ -49,7 +49,7 @@ namespace UbyTECAPI.Controllers
         {
             string query = @"select A.cedula as ""ID"",A.nombre as ""FirstN"",A.apellido1 as ""FirstLN"", A.apellido2 as ""SecondLN"",
                             A.correo as ""Email"", A.usuario as ""Username"",A.contra as ""Password"",
-                            A.provincia as ""Province"", A.canton as ""Canton"", A.distrito as ""District""
+                            A.provincia as ""Province"", A.canton as ""Canton"", A.distrito as ""District"", A.profilepic as ""ProfilePic""
                             from admin_afiliado as A;";
 
             DataTable table = execquery(query);
@@ -64,7 +64,7 @@ namespace UbyTECAPI.Controllers
         {
             string query = @"select A.cedula as ""ID"",A.nombre as ""FirstN"",A.apellido1 as ""FirstLN"", A.apellido2 as ""SecondLN"",
                             A.correo as ""Email"", A.usuario as ""Username"",A.contra as ""Password"",
-                            A.provincia as ""Province"", A.canton as ""Canton"", A.distrito as ""District""
+                            A.provincia as ""Province"", A.canton as ""Canton"", A.distrito as ""District"", A.profilepic as ""ProfilePic""
                             from admin_afiliado As A 
                             where A.Cedula = '" + id + "'";
 
@@ -83,11 +83,14 @@ namespace UbyTECAPI.Controllers
                              ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Username + "','" + adm.Password + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + "'," + adm.ProfilePic + @")";
             */
             string query = @"Insert into admin_afiliado 
-                             Values  ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Email + "','" + adm.Username + "','" + adm.Password + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + @"');";
-            Console.WriteLine("---------------------------");
-            Console.WriteLine(query);
-            Console.WriteLine("---------------------------");
-            DataTable table = execquery(query);
+                             Values  ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Email + "','" + adm.Username + "','" + adm.Password + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + "','" + adm.ProfilePic + @"');";
+            
+            execquery(query);
+
+            query = @"Insert into Telefonos_admin_afiliado
+                             Values  ('" + adm.ID + "','" + adm.PhoneNum + @"');";
+
+            execquery(query);
 
             return new JsonResult("Insert Success");
 
@@ -109,11 +112,19 @@ namespace UbyTECAPI.Controllers
                     provincia = '" + adm.Province + @"',
                     canton = '" + adm.Canton + @"',
                     distrito = '" + adm.District + @"',
-                    profile_pic = '" + adm.ProfilePic + @"'
+                    profilepic = '" + adm.ProfilePic + @"'
                     where cedula = '" + adm.ID + @"'
                     ";
 
-            DataTable table = execquery(query);
+            execquery(query);
+
+            query = @"
+                    update Telefonos_admin_afiliado set 
+                    telefono = '" + adm.PhoneNum + @"'
+                    where cedula_a = '" + adm.ID + @"'
+                    ";
+
+            execquery(query);
 
             return new JsonResult("Update Success");
 
@@ -124,7 +135,12 @@ namespace UbyTECAPI.Controllers
         [Route("delete/{id}")]
         public JsonResult Delete(string id)
         {
-            string query = @"delete from admin_afiliado
+            string query = @"delete from Telefonos_admin_afiliado
+                             where cedula_a = '" + id + "'";
+
+            execquery(query);
+
+            query = @"delete from admin_afiliado
                              where cedula = '" + id + "'";
 
             DataTable table = execquery(query);

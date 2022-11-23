@@ -48,7 +48,7 @@ namespace UbyTECAPI.Controllers
         {
             string query = @"select cedula as ""ID"", nombre as ""FirstN"",apellido1 as ""FirstLN"",apellido2 as ""SecondLN"",
                             usuario as ""Username"",contra as ""Password"",correo as ""Email"", 
-                            provincia as ""Province"", canton as ""Canton"", distrito as ""District"", disponibilidad as ""Status"" 
+                            provincia as ""Province"", canton as ""Canton"", distrito as ""District"", disponibilidad as ""Status"", profilepic as ""ProfilePic""
                             from repartidor";
 
             DataTable table = execquery(query);
@@ -63,9 +63,13 @@ namespace UbyTECAPI.Controllers
         {
             string query = @"select cedula as ""ID"", nombre as ""FirstN"",apellido1 as ""FirstLN"",apellido2 as ""SecondLN"",
                             usuario as ""Username"",contra as ""Password"",correo as ""Email"", 
-                            provincia as ""Province"", canton as ""Canton"", distrito as ""District"", disponibilidad as ""Status"" 
-                            from tipo_comercio
-                             where cedula = '" + id + "';";
+                            provincia as ""Province"", canton as ""Canton"", distrito as ""District"", disponibilidad as ""Status"", profilepic as ""ProfilePic"", t.""PhoneNum""
+                            from repartidor left join 
+	                            (select distinct on (cedula_r) telefono as ""PhoneNum"", cedula_r 
+	                             from telefonos_repartidor
+	                             order by cedula_r) as t
+                            on cedula_r = cedula 
+                            where cedula = '" + id + "';";
 
             DataTable table = execquery(query);
 
@@ -82,9 +86,14 @@ namespace UbyTECAPI.Controllers
                              ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Username + "','" + adm.Password + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + "'," + adm.ProfilePic + @")";
             */
             string query = @"Insert into repartidor
-                             Values  ('" + rep.ID + "','" + rep.FirstN + "','" + rep.FirstLN + "','" + rep.SecondLN + "','" + rep.Username + "','" + rep.Password + "','" + rep.Email + "','" + rep.Province + "','" + rep.Canton + "','" + rep.District + "','" + rep.Status + @"');";
+                             Values  ('" + rep.ID + "','" + rep.FirstN + "','" + rep.FirstLN + "','" + rep.SecondLN + "','" + rep.Username + "','" + rep.Password + "','" + rep.Email + "','" + rep.Province + "','" + rep.Canton + "','" + rep.District + "','" + rep.Status + "','" + rep.ProfilePic + @"');";
 
-            DataTable table = execquery(query);
+            execquery(query);
+
+            query = @"Insert into telefonos_repartidor
+                             Values  ('" + rep.ID + "','" + rep.PhoneNum + @"');";
+
+            execquery(query);
 
 
 
@@ -107,11 +116,20 @@ namespace UbyTECAPI.Controllers
                         provincia = '" + rep.Province + @"',
                         canton = '" + rep.Canton + @"',
                         distrito = '" + rep.District + @"',
-                        disponibilidad = '" + rep.Status + @"'
+                        disponibilidad = '" + rep.Status + @"',
+                        profilepic = '" + rep.ProfilePic + @"'
                         where cedula = '" + rep.ID + @"'
                         ";
 
-            DataTable table = execquery(query);
+            execquery(query);
+
+            query = @"
+                        update telefonos_repartidor set 
+                        telefono = '" + rep.PhoneNum + @"'
+                        where cedula_r = '" + rep.ID + @"'
+                        ";
+
+            execquery(query);
 
             return new JsonResult("Update Success");
 
@@ -122,10 +140,15 @@ namespace UbyTECAPI.Controllers
         [Route("delete/{id}")]
         public JsonResult Delete(string id)
         {
-            string query = @"delete from repartidor
+            string query = @"delete from telefonos_repartidor
+                                 where cedula_r = '" + id + "'";
+
+            execquery(query);
+
+            query = @"delete from repartidor
                                  where cedula = '" + id + "'";
 
-            DataTable table = execquery(query);
+            execquery(query);
 
             return new JsonResult("Delete Success");
 

@@ -7,7 +7,7 @@ using UbyTECAPI.Models;
 
 namespace UbyTECAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("affiliado")]
     [ApiController]
     public class AfiliadoController : ControllerBase
     {
@@ -140,14 +140,14 @@ namespace UbyTECAPI.Controllers
                 Afiliado af = afiliados[0];
 
                 //get tipo
-                string tipo_name = get_tipo(af);
+                //string tipo_name = get_tipo(af);
 
                 //get telefono
                 string telefono = get_phone(af);
 
 
                 //asign telefono
-                af.Type = tipo_name;
+                //af.Type = tipo_name;
                 af.PhoneNum = telefono;
 
 
@@ -159,10 +159,60 @@ namespace UbyTECAPI.Controllers
             {
                 return new JsonResult(table).ToString();
             }
+        }
+
+        [HttpGet]
+        [Route("get_status/{status}")]
+        public string Get2(string status)
+        {
+            string query = @"select E.cedula_j as ""ID"", E.cedula_a as ""AdminID"", E.id_tipo as ""Type"", E.nombre as ""Name"", E.correo as ""Email"",E.sinpe as ""SINPE"", E.banner as ""Banner"", E.provincia as ""Province"", E.canton as ""Canton"", E.distrito as ""District"", s.""Status""
+                             from Afiliado as E left join
+                                (select estado as ""Status"", cedula_a
+                                from solicitud_afiliado
+                                order by cedula_a) as s
+                             on s.cedula_a = E.cedula_j
+                             where s.""Status"" = '" + status + "'";
+            //string query = @"select  from Afiliado As A where A.cedula_J = '" + id + "'";
+            Console.WriteLine(query);
+
+            DataTable table = execquery(query);
+
+            string json = JsonConvert.SerializeObject(table);
+            List<Afiliado> afiliados = JsonConvert.DeserializeObject<List<Afiliado>>(json);
+
+            if (afiliados != null)
+            {
+                try
+                {
+                    foreach(Afiliado af in afiliados)
+                    {
+                        //get tipo
+                        string tipo_name = get_tipo(af);
+
+                        //get telefono
+                        string telefono = get_phone(af);
 
 
-            
+                        //asign telefono
+                        af.Type = tipo_name;
+                        af.PhoneNum = telefono;
+                    }
 
+                    var jsonC = JsonConvert.SerializeObject(afiliados, Formatting.Indented);
+
+                    return jsonC;
+                }
+                catch (Exception)
+                {
+                    return "[]";
+                    throw;
+                }
+                
+            }
+            else
+            {
+                return new JsonResult(table).ToString();
+            }
         }
 
         [HttpPost]
@@ -175,23 +225,37 @@ namespace UbyTECAPI.Controllers
             
             string query = @"Insert into afiliado 
                              Values  ('" + adm.ID + "','" + adm.AdminID + "'," + adm.Type.ToString() + ",'" + adm.Name + "','" + adm.Email + "','" + adm.SINPE + "','" + adm.Banner+"','" + adm.Province + "','" + adm.Canton + "','" + adm.District + @"');";
-            Console.WriteLine("---------------------------");
-            Console.WriteLine(query);
-            Console.WriteLine("---------------------------");
-            DataTable table = execquery(query);
+
+            execquery(query);
+
+            query = @"Insert into telefonos_afiliado 
+                             Values  ('" + adm.ID + "','" + adm.PhoneNum + @"');";
+
+            execquery(query);
 
             return new JsonResult("Insert Success");
 
         }
 
+        [HttpPost]
+        [Route("crear_solicitud")]
+        public JsonResult Post2(Solicitud_Afiliado adm)
+        {
+
+            string query = @"Insert into solicitud_afiliado (cedula_a, cedula_e, comentario, estado)
+                             Values  ('" + adm.Cedula_Afiliado + "','" + adm.Cedula_Empleado + "','" + adm.Comentario + "','" + adm.Status + @"');";
+
+            execquery(query);
+
+            return new JsonResult("Insert Success");
+
+        }
+        
 
         [HttpPut]
         [Route("update")]
         public JsonResult Put(Afiliado adm)
         {
-
-
-
             string query = @"
                     update afiliado set 
                     cedula_a = '" + adm.AdminID + @"',
@@ -206,10 +270,37 @@ namespace UbyTECAPI.Controllers
                     where cedula_j = '" + adm.ID + @"'
                     ";
 
-            DataTable table = execquery(query);
+            execquery(query);
+
+            query = @"
+                    update telefonos_afiliado set
+                    telefono = '" + adm.PhoneNum + @"'
+                    where cedula_j_a = '" + adm.ID + @"'
+                    ";
+
+            execquery(query);
 
 
 
+            return new JsonResult("Update Success");
+
+        }
+
+        [HttpPut]
+        [Route("update_solicitud")]
+        public JsonResult Put2(Solicitud_Afiliado adm)
+        {
+
+
+
+            string query = @"
+                    update solicitud_afiliado set 
+                    comentario = '" + adm.Comentario + @"',
+                    estado = '" + adm.Status + @"'
+                    where cedula_a = '" + adm.Cedula_Afiliado + @"'
+                    ";
+
+            execquery(query);
 
             return new JsonResult("Update Success");
 
@@ -220,10 +311,20 @@ namespace UbyTECAPI.Controllers
         [Route("delete/{id}")]
         public JsonResult Delete(string id)
         {
-            string query = @"delete from afiliado
+            string query = @"delete from solicitud_afiliado
+                             where Cedula_a = '" + id + "'";
+
+            execquery(query);
+
+            query = @"delete from telefonos_afiliado
+                             where Cedula_j_a = '" + id + "'";
+
+            execquery(query);
+
+            query = @"delete from afiliado
                              where Cedula_j = '" + id + "'";
 
-            DataTable table = execquery(query);
+            execquery(query);
 
             return new JsonResult("Delete Success");
 
