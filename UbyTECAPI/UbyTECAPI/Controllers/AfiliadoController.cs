@@ -46,12 +46,12 @@ namespace UbyTECAPI.Controllers
 
         private string get_tipo(Afiliado af)
         {
-            string query2 = @"select * from tipo_comercio where id_tipo = " + af.Type + ";";
+            string query2 = @"select id_tipo as ""ID"", nombre as ""Name"" from tipo_comercio where id_tipo = " + af.Type + ";";
             DataTable table2 = execquery(query2);
             string json2 = JsonConvert.SerializeObject(table2);
             List<Tipo_Comercio> tipo = JsonConvert.DeserializeObject<List<Tipo_Comercio>>(json2);
 
-            return tipo[0].Nombre;
+            return tipo[0].Name;
 
         }
 

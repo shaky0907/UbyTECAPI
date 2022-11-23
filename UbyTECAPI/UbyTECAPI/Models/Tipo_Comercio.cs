@@ -3,6 +3,6 @@
     public class Tipo_Comercio
     {
         public string ID { get; set; }
-        public string Nombre { get; set; }
+        public string Name { get; set; }
     }
 }
