@@ -106,7 +106,33 @@ namespace UbyTECAPI.Controllers
 
                 order.RestID = af[0].ID;
                 order.RestName = af[0].Name;
+
+                query = @"select estado as ""Estado""
+                          from pedido
+                          where id_pedido = " + order.ID;
+
+
+                DataTable ptable = execquery(query);
+
+                if(ptable.Rows.Count > 0)
+                {
+                    string jsonP = JsonConvert.SerializeObject(ptable);
+                    List<Pedido> pedidos = JsonConvert.DeserializeObject<List<Pedido>>(jsonP);
+                    order.Status = pedidos[0].Estado;
+                }
+                else
+                {
+                    order.Status = "pending";
+                }
+
+
+
+
             }
+
+
+
+
             var jsonC = JsonConvert.SerializeObject(orders, Formatting.Indented);
 
             return jsonC;
