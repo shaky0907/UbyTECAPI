@@ -1,21 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Data;
-using System.Runtime.CompilerServices;
 using UbyTECAPI.Models;
 
 namespace UbyTECAPI.Controllers
 {
-
+    
     [ApiController]
-    [Route("empleado")]
-    public class EmpleadoController : ControllerBase
+    [Route("adminAf")]
+    public class AdminAfiliadoController : ControllerBase
     {
 
         private readonly IConfiguration _configuration;
-        public EmpleadoController(IConfiguration configuration)
+        public AdminAfiliadoController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -45,14 +43,11 @@ namespace UbyTECAPI.Controllers
 
         }
 
-
-
-
         [HttpGet]
         [Route("get")]
         public JsonResult Get()
         {
-            string query = @"select * from Empleado;";
+            string query = @"select * from admin_afiliado;";
 
             DataTable table = execquery(query);
 
@@ -64,7 +59,7 @@ namespace UbyTECAPI.Controllers
         [Route("get/{id}")]
         public JsonResult Get(string id)
         {
-            string query = @"select * from Empleado As E where E.Cedula = '"+id+"'";
+            string query = @"select * from admin_afiliado As A where A.Cedula = '" + id + "'";
 
             DataTable table = execquery(query);
 
@@ -74,14 +69,14 @@ namespace UbyTECAPI.Controllers
 
         [HttpPost]
         [Route("guardar")]
-        public JsonResult Post(Empleado emp)
+        public JsonResult Post(AdminAfiliado adm)
         {
             /*
-            string query = @"insert into Empleado 
-                             ('" + emp.ID + "','" + emp.FirstN + "','" + emp.FirstLN + "','" + emp.SecondLN + "','" + emp.Username + "','" + emp.Password + "','" + emp.Province + "','" + emp.Canton + "','" + emp.District + "'," + emp.ProfilePic + @")";
+            string query = @"insert into admleado 
+                             ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Username + "','" + adm.Password + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + "'," + adm.ProfilePic + @")";
             */
-            string query = @"Insert into Empleado (Cedula,Nombre,Apellido1,Apellido2,Usuario,Contra,Provincia,Canton,Distrito,Profile_Pic)
-                             Values  ('" + emp.Cedula + "','" + emp.Nombre + "','" + emp.Apellido1 + "','" + emp.Apellido2 + "','" + emp.Usuario + "','" + emp.Contra + "','" + emp.Provincia + "','" + emp.Canton + "','" + emp.Distrito + "','" + emp.Profile_Pic + @"');";
+            string query = @"Insert into admin_afiliado 
+                             Values  ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Email + "','" + adm.Username + "','" + adm.Password + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + @"');";
             Console.WriteLine("---------------------------");
             Console.WriteLine(query);
             Console.WriteLine("---------------------------");
@@ -94,20 +89,21 @@ namespace UbyTECAPI.Controllers
 
         [HttpPut]
         [Route("update")]
-        public JsonResult Put(Empleado emp)
+        public JsonResult Put(AdminAfiliado adm)
         {
             string query = @"
-                    update Empleado set 
-                    nombre = '" + emp.Nombre + @"',
-                    apellido1 = '" + emp.Apellido1 + @"',
-                    apellido2 = '" + emp.Apellido2 + @"',
-                    usuario = '" + emp.Usuario + @"',
-                    contra = '" + emp.Contra + @"',
-                    provincia = '" + emp.Provincia + @"',
-                    canton = '" + emp.Canton + @"',
-                    distrito = '" + emp.Distrito + @"',
-                    profile_pic = '" + emp.Profile_Pic + @"'
-                    where cedula = '" + emp.Cedula + @"'
+                    update admin_afiliado set 
+                    cedula = '" + adm.ID + @"'
+                    nombre = '" + adm.FirstN + @"',
+                    apellido1 = '" + adm.FirstLN + @"',
+                    apellido2 = '" + adm.SecondLN + @"',
+                    email = '" + adm.Email + @"',
+                    usuario = '" + adm.Username + @"'
+                    contra = '" + adm.Password + @"'
+                    provincia = '" + adm.Province + @"'
+                    canton = '" + adm.Canton + @"'
+                    distrito = '" + adm.District + @"'
+                    where cedula = '" + adm.ID + @"'
                     ";
 
             DataTable table = execquery(query);
@@ -121,14 +117,15 @@ namespace UbyTECAPI.Controllers
         [Route("delete/{id}")]
         public JsonResult Delete(string id)
         {
-            string query = @"delete from Empleado
-                             where Cedula = '"+id+"'";
+            string query = @"delete from admin_afiliado
+                             where cedula = '" + id + "'";
 
             DataTable table = execquery(query);
 
             return new JsonResult("Delete Success");
 
         }
+
 
 
     }
