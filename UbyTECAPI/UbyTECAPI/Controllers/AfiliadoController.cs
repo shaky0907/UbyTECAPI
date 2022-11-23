@@ -76,12 +76,14 @@ namespace UbyTECAPI.Controllers
             
         }
 
+        
+
 
         [HttpGet]
         [Route("get")]
         public string Get()
         {
-            string query = @"select E.cedula_j as ID, E.cedula_a as AdminID, E.id_tipo as Type, E.nombre as Name, E.correo as Email,E.sinpe as SINPE, E.banner as Banner, E.provincia as Province, E.canton, E.distrito as District
+            string query = @"select E.cedula_j as ""ID"", E.cedula_a as ""AdminID"", E.id_tipo as ""Type"", E.nombre as ""Name"", E.correo as ""Email"",E.sinpe as ""SINPE"", E.banner as ""Banner"", E.provincia as ""Province"", E.canton as ""Canton"", E.distrito as ""District""
                              from Afiliado as E;";
 
             DataTable table = execquery(query);
@@ -122,9 +124,9 @@ namespace UbyTECAPI.Controllers
         [Route("get/{id}")]
         public string Get(string id)
         {
-            string query = @"select E.cedula_j as ID, E.cedula_a as AdminID, E.id_tipo as Type, E.nombre as Name, E.correo as Email,E.sinpe as SINPE, E.banner as Banner, E.provincia as Province, E.canton, E.distrito as District
+            string query = @"select E.cedula_j as ""ID"", E.cedula_a as ""AdminID"", E.id_tipo as ""Type"", E.nombre as ""Name"", E.correo as ""Email"",E.sinpe as ""SINPE"", E.banner as ""Banner"", E.provincia as ""Province"", E.canton as ""Canton"", E.distrito as ""District""
                              from Afiliado as E
-                             where E.cedula_j = '"+ id+"'";
+                             where E.cedula_j = '" + id+"'";
             //string query = @"select  from Afiliado As A where A.cedula_J = '" + id + "'";
 
             DataTable table = execquery(query);
