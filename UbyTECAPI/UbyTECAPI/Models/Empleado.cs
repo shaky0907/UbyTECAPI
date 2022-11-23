@@ -2,19 +2,17 @@
 {
     public class Empleado
     {
-        public string Cedula { get; set; }
-        public string Nombre { get; set; }
-        public string Apellido1 { get; set; }
-        public string Apellido2 { get; set; }
-        public string Usuario { get; set; }
-        public string Contra { get; set; }
-        public string Provincia { get; set; }
+        public string ID { get; set; }
+        public string FirstN { get; set; }
+        public string FirstLN { get; set; }
+        public string SecondLN { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string Province { get; set; }
         public string Canton { get; set; }
-        public string Distrito { get; set; }
-        public string Telefono { get; set; }
-        public string Profile_Pic { get; set; }
-
-
+        public string District { get; set; }
+        public string PhoneNum { get; set; }
+        public string ProfilePic { get; set; }
 
     }
 }

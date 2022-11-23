@@ -81,7 +81,7 @@ namespace UbyTECAPI.Controllers
                              ('" + emp.ID + "','" + emp.FirstN + "','" + emp.FirstLN + "','" + emp.SecondLN + "','" + emp.Username + "','" + emp.Password + "','" + emp.Province + "','" + emp.Canton + "','" + emp.District + "'," + emp.ProfilePic + @")";
             */
             string query = @"Insert into Empleado (Cedula,Nombre,Apellido1,Apellido2,Usuario,Contra,Provincia,Canton,Distrito,Profile_Pic)
-                             Values  ('" + emp.Cedula + "','" + emp.Nombre + "','" + emp.Apellido1 + "','" + emp.Apellido2 + "','" + emp.Usuario + "','" + emp.Contra + "','" + emp.Provincia + "','" + emp.Canton + "','" + emp.Distrito + "','" + emp.Profile_Pic + @"');";
+                             Values  ('" + emp.ID + "','" + emp.FirstN + "','" + emp.FirstLN + "','" + emp.SecondLN + "','" + emp.Username + "','" + emp.Password + "','" + emp.Province + "','" + emp.Canton + "','" + emp.District + "','" + emp.ProfilePic + @"');";
             Console.WriteLine("---------------------------");
             Console.WriteLine(query);
             Console.WriteLine("---------------------------");
@@ -98,16 +98,16 @@ namespace UbyTECAPI.Controllers
         {
             string query = @"
                     update Empleado set 
-                    nombre = '" + emp.Nombre + @"',
-                    apellido1 = '" + emp.Apellido1 + @"',
-                    apellido2 = '" + emp.Apellido2 + @"',
-                    usuario = '" + emp.Usuario + @"',
-                    contra = '" + emp.Contra + @"',
-                    provincia = '" + emp.Provincia + @"',
+                    nombre = '" + emp.FirstN + @"',
+                    apellido1 = '" + emp.FirstLN + @"',
+                    apellido2 = '" + emp.SecondLN + @"',
+                    usuario = '" + emp.Username + @"',
+                    contra = '" + emp.Password + @"',
+                    provincia = '" + emp.Province + @"',
                     canton = '" + emp.Canton + @"',
-                    distrito = '" + emp.Distrito + @"',
-                    profile_pic = '" + emp.Profile_Pic + @"'
-                    where cedula = '" + emp.Cedula + @"'
+                    distrito = '" + emp.District + @"',
+                    profile_pic = '" + emp.ProfilePic + @"'
+                    where cedula = '" + emp.ID + @"'
                     ";
 
             DataTable table = execquery(query);

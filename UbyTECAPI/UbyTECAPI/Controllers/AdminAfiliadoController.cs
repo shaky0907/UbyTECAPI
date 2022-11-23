@@ -93,16 +93,16 @@ namespace UbyTECAPI.Controllers
         {
             string query = @"
                     update admin_afiliado set 
-                    cedula = '" + adm.ID + @"'
                     nombre = '" + adm.FirstN + @"',
                     apellido1 = '" + adm.FirstLN + @"',
                     apellido2 = '" + adm.SecondLN + @"',
-                    email = '" + adm.Email + @"',
-                    usuario = '" + adm.Username + @"'
-                    contra = '" + adm.Password + @"'
-                    provincia = '" + adm.Province + @"'
-                    canton = '" + adm.Canton + @"'
-                    distrito = '" + adm.District + @"'
+                    correo = '" + adm.Email + @"',
+                    usuario = '" + adm.Username + @"',
+                    contra = '" + adm.Password + @"',
+                    provincia = '" + adm.Province + @"',
+                    canton = '" + adm.Canton + @"',
+                    distrito = '" + adm.District + @"',
+                    profile_pic = '" + adm.ProfilePic + @"'
                     where cedula = '" + adm.ID + @"'
                     ";
 

@@ -12,6 +12,7 @@
         public string Email { get; set; }
         public string SINPE { get; set; }
         public string AdminID { get; set; }
+        public string Banner { get; set; }
         public string Status { get; set; }
 
     }
