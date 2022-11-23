@@ -47,12 +47,8 @@ namespace UbyTECAPI.Controllers
         public JsonResult Get()
         {
             string query = @"select producto.id_producto as ""ID"", cedula_a as ""AffiliateID"",nombre as ""Name"",categoria as ""Category"",
-                            precio as ""Price"", t.""Picture""
-                            from producto left join 
-	                            (select distinct on (id_producto) foto as ""Picture"", id_producto
-	                             from fotos_producto
-	                             order by id_producto) as t
-                            on t.id_producto = producto.id_producto";
+                            precio as ""Price"", picture as ""Picture""
+                            from producto";
 
             DataTable table = execquery(query);
 
@@ -65,12 +61,8 @@ namespace UbyTECAPI.Controllers
         public JsonResult Get(string id)
         {
             string query = @"select producto.id_producto as ""ID"", cedula_a as ""AffiliateID"",nombre as ""Name"",categoria as ""Category"",
-                            precio as ""Price"", t.""Picture""
-                            from producto left join 
-	                            (select distinct on (id_producto) foto as ""Picture"", id_producto
-	                             from fotos_producto
-	                             order by id_producto) as t
-                            on t.id_producto = producto.id_producto
+                            precio as ""Price"", picture as ""Picture""
+                            from producto
                             where id_producto = " + id + ";";
 
             DataTable table = execquery(query);
@@ -85,12 +77,8 @@ namespace UbyTECAPI.Controllers
         public JsonResult Get2(string id)
         {
             string query = @"select producto.id_producto as ""ID"", cedula_a as ""AffiliateID"",nombre as ""Name"",categoria as ""Category"",
-                            precio as ""Price"", t.""Picture""
-                            from producto left join 
-	                            (select distinct on (id_producto) foto as ""Picture"", id_producto
-	                             from fotos_producto
-	                             order by id_producto) as t
-                            on t.id_producto = producto.id_producto
+                            precio as ""Price"", picture as ""Picture""
+                            from producto
                             where cedula_a = '" + id + "';";
 
             DataTable table = execquery(query);
@@ -104,24 +92,24 @@ namespace UbyTECAPI.Controllers
         public JsonResult Post(Producto prod)
         {
             
-            string query = @"Insert into producto (cedula_a,nombre,categoria,precio)
-                             Values  ('" + prod.AffiliateID + "','" + prod.Name + "','" + prod.Category + "'," + prod.Price + @");";
+            string query = @"Insert into producto (cedula_a,nombre,categoria,precio, picture)
+                             Values  ('" + prod.AffiliateID + "','" + prod.Name + "','" + prod.Category + "'," + prod.Price + ",'" + prod.Picture + @"');";
 
             execquery(query);
 
-            query = @"select id_producto As ""ID"" from producto 
-                    where cedula_a = '"+ prod.AffiliateID + "' And nombre = '"+ prod.Name + "' And categoria = '"+ prod.Category+"' And precio = "+ prod.Price+ ";";
+            //query = @"select id_producto As ""ID"" from producto 
+             //       where cedula_a = '"+ prod.AffiliateID + "' And nombre = '"+ prod.Name + "' And categoria = '"+ prod.Category+"' And precio = "+ prod.Price+ ";";
 
 
-            DataTable table = execquery(query);
+            //DataTable table = execquery(query);
 
-            string json = JsonConvert.SerializeObject(table);
-            List<Producto> p = JsonConvert.DeserializeObject<List<Producto>>(json);
+            //string json = JsonConvert.SerializeObject(table);
+            //List<Producto> p = JsonConvert.DeserializeObject<List<Producto>>(json);
 
-            query = @"Insert into fotos_producto
-                             Values  (" + p[0].ID + ",'" + prod.Picture + @"');";
+            //query = @"Insert into fotos_producto
+            //                 Values  (" + p[0].ID + ",'" + prod.Picture + @"');";
 
-            execquery(query);
+            //execquery(query);
 
             return new JsonResult("Insert Success");
 
@@ -137,15 +125,8 @@ namespace UbyTECAPI.Controllers
                         cedula_a = '" + prod.AffiliateID + @"',
                         nombre= '" + prod.Name + @"',
                         categoria = '" + prod.Category + @"',
-                        precio = " + prod.Price + @"
-                        where id_producto = " + prod.ID + @"
-                        ";
-
-            execquery(query);
-
-            query = @"
-                        update fotos_producto set 
-                        foto = '" + prod.Picture + @"'
+                        precio = " + prod.Price + @",
+                        picture = '" + prod.Picture + @"'
                         where id_producto = " + prod.ID + @"
                         ";
 
@@ -164,9 +145,6 @@ namespace UbyTECAPI.Controllers
                                  where producto.id_producto = " + id + "";
 
             execquery(query);
-
-            query = @"delete from fotos_producto
-                                 where fotos_producto.id_producto = " + id + "";
 
             return new JsonResult("Delete Success");
 
