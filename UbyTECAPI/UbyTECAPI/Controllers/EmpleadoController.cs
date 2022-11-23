@@ -52,7 +52,15 @@ namespace UbyTECAPI.Controllers
         [Route("get")]
         public JsonResult Get()
         {
-            string query = @"select * from Empleado;";
+            string query = @"select cedula as ID, nombre as FirstN, apellido1 as FirstLN, apellido2 as SecondLN, 
+		                    provincia as Province, canton as Canton, distrito as District, usuario as Username, contra as Password, 
+		                    profile_pic as ProfilePic, t.phoneNum
+                            from Empleado left join 
+	                            (select telefono as phoneNum, cedula_e 
+	                             from telefonos_empleado
+	                             order by cedula_e 
+	                             limit 1) as t
+                            on cedula_e = cedula";
 
             DataTable table = execquery(query);
 
@@ -64,7 +72,16 @@ namespace UbyTECAPI.Controllers
         [Route("get/{id}")]
         public JsonResult Get(string id)
         {
-            string query = @"select * from Empleado As E where E.Cedula = '"+id+"'";
+            string query = @"select cedula as ID, nombre as FirstN, apellido1 as FirstLN, apellido2 as SecondLN, 
+		                    provincia as Province, canton as Canton, distrito as District, usuario as Username, contra as Password, 
+		                    profile_pic as ProfilePic, t.phoneNum
+                            from Empleado left join 
+	                            (select telefono as phoneNum, cedula_e 
+	                             from telefonos_empleado
+	                             order by cedula_e 
+	                             limit 1) as t
+                            on cedula_e = cedula 
+                            where cedula = '" + id+"'";
 
             DataTable table = execquery(query);
 
@@ -80,12 +97,17 @@ namespace UbyTECAPI.Controllers
             string query = @"insert into Empleado 
                              ('" + emp.ID + "','" + emp.FirstN + "','" + emp.FirstLN + "','" + emp.SecondLN + "','" + emp.Username + "','" + emp.Password + "','" + emp.Province + "','" + emp.Canton + "','" + emp.District + "'," + emp.ProfilePic + @")";
             */
-            string query = @"Insert into Empleado (Cedula,Nombre,Apellido1,Apellido2,Usuario,Contra,Provincia,Canton,Distrito,Profile_Pic)
+            string query = @"Insert into Empleado
                              Values  ('" + emp.ID + "','" + emp.FirstN + "','" + emp.FirstLN + "','" + emp.SecondLN + "','" + emp.Username + "','" + emp.Password + "','" + emp.Province + "','" + emp.Canton + "','" + emp.District + "','" + emp.ProfilePic + @"');";
             Console.WriteLine("---------------------------");
             Console.WriteLine(query);
             Console.WriteLine("---------------------------");
-            DataTable table = execquery(query);
+            execquery(query);
+
+            query = @"Insert into Telefonos_empleado
+                             Values  ('" + emp.ID + "','" + emp.PhoneNum + @"');";
+
+            execquery(query);
 
             return new JsonResult("Insert Success");
 
@@ -110,7 +132,13 @@ namespace UbyTECAPI.Controllers
                     where cedula = '" + emp.ID + @"'
                     ";
 
-            DataTable table = execquery(query);
+            execquery(query);
+
+            query = @"
+                    update Telefonos_empleado set 
+                    telefono = '" + emp.PhoneNum + @"',
+                    where cedula_e = '" + emp.ID + @"'
+                    ";
 
             return new JsonResult("Update Success");
 
@@ -122,7 +150,7 @@ namespace UbyTECAPI.Controllers
         public JsonResult Delete(string id)
         {
             string query = @"delete from Empleado
-                             where Cedula = '"+id+"'";
+                             where Cedula = '" + id + "'";
 
             DataTable table = execquery(query);
 
