@@ -52,14 +52,13 @@ namespace UbyTECAPI.Controllers
         [Route("get")]
         public JsonResult Get()
         {
-            string query = @"select cedula as ID, nombre as FirstN, apellido1 as FirstLN, apellido2 as SecondLN, 
-		                    provincia as Province, canton as Canton, distrito as District, usuario as Username, contra as Password, 
-		                    profile_pic as ProfilePic, t.phoneNum
+            string query = @"select cedula as ""ID"", nombre as ""FirstN"", apellido1 as ""FirstLN"", apellido2 as ""SecondLN"", 
+		                    provincia as ""Province"", canton as ""Canton"", distrito as ""District"", usuario as ""Username"", contra as ""Password"", 
+		                    profile_pic as ""ProfilePic"", t.""PhoneNum""
                             from Empleado left join 
-	                            (select telefono as phoneNum, cedula_e 
+	                            (select distinct on (cedula_e) telefono as ""PhoneNum"", cedula_e 
 	                             from telefonos_empleado
-	                             order by cedula_e 
-	                             limit 1) as t
+	                             order by cedula_e) as t
                             on cedula_e = cedula";
 
             DataTable table = execquery(query);
@@ -72,14 +71,13 @@ namespace UbyTECAPI.Controllers
         [Route("get/{id}")]
         public JsonResult Get(string id)
         {
-            string query = @"select cedula as ID, nombre as FirstN, apellido1 as FirstLN, apellido2 as SecondLN, 
-		                    provincia as Province, canton as Canton, distrito as District, usuario as Username, contra as Password, 
-		                    profile_pic as ProfilePic, t.phoneNum
+            string query = @"select cedula as ""ID"", nombre as ""FirstN"", apellido1 as ""FirstLN"", apellido2 as ""SecondLN"", 
+		                    provincia as ""Province"", canton as ""Canton"", distrito as ""District"", usuario as ""Username"", contra as ""Password"", 
+		                    profile_pic as ""ProfilePic"", t.""PhoneNum""
                             from Empleado left join 
-	                            (select telefono as phoneNum, cedula_e 
+	                            (select distinct on (cedula_e) telefono as ""PhoneNum"", cedula_e 
 	                             from telefonos_empleado
-	                             order by cedula_e 
-	                             limit 1) as t
+	                             order by cedula_e) as t
                             on cedula_e = cedula 
                             where cedula = '" + id+"'";
 
@@ -136,9 +134,11 @@ namespace UbyTECAPI.Controllers
 
             query = @"
                     update Telefonos_empleado set 
-                    telefono = '" + emp.PhoneNum + @"',
+                    telefono = '" + emp.PhoneNum + @"'
                     where cedula_e = '" + emp.ID + @"'
                     ";
+
+            execquery(query);
 
             return new JsonResult("Update Success");
 
@@ -149,10 +149,15 @@ namespace UbyTECAPI.Controllers
         [Route("delete/{id}")]
         public JsonResult Delete(string id)
         {
-            string query = @"delete from Empleado
-                             where Cedula = '" + id + "'";
+            string query = @"delete from Telefonos_empleado
+                             where cedula_e = '" + id + "'";
 
-            DataTable table = execquery(query);
+            execquery(query);
+
+            query = @"delete from Empleado
+                             where cedula = '" + id + "'";
+
+            execquery(query);
 
             return new JsonResult("Delete Success");
 
