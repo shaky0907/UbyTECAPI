@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Npgsql;
 using System.Data;
 using UbyTECAPI.Models;
@@ -108,8 +109,17 @@ namespace UbyTECAPI.Controllers
 
             execquery(query);
 
+            query = @"select id_producto As ""ID"" from producto 
+                    where cedula_a = '"+ prod.AffiliateID + "' And nombre = '"+ prod.Name + "' And categoria = '"+ prod.Category+"' And precio = "+ prod.Price+ ";";
+
+
+            DataTable table = execquery(query);
+
+            string json = JsonConvert.SerializeObject(table);
+            List<Producto> p = JsonConvert.DeserializeObject<List<Producto>>(json);
+
             query = @"Insert into fotos_producto
-                             Values  (" + prod.ID + ",'" + prod.Picture + @"');";
+                             Values  (" + p[0].ID + ",'" + prod.Picture + @"');";
 
             execquery(query);
 
