@@ -47,7 +47,10 @@ namespace UbyTECAPI.Controllers
         [Route("get")]
         public JsonResult Get()
         {
-            string query = @"select * from admin_afiliado;";
+            string query = @"select A.cedula as ""ID"",A.nombre as ""FirstN"",A.apellido1 as ""FirstLN"", A.apellido2 as ""SecondLN"",
+                            A.correo as ""Email"", A.usuario as ""Username"",A.contra as ""Password"",
+                            A.provincia as ""Province"", A.canton as ""Canton"", A.distrito as ""District""
+                            from admin_afiliado as A;";
 
             DataTable table = execquery(query);
 
@@ -59,7 +62,11 @@ namespace UbyTECAPI.Controllers
         [Route("get/{id}")]
         public JsonResult Get(string id)
         {
-            string query = @"select * from admin_afiliado As A where A.Cedula = '" + id + "'";
+            string query = @"select A.cedula as ""ID"",A.nombre as ""FirstN"",A.apellido1 as ""FirstLN"", A.apellido2 as ""SecondLN"",
+                            A.correo as ""Email"", A.usuario as ""Username"",A.contra as ""Password"",
+                            A.provincia as ""Province"", A.canton as ""Canton"", A.distrito as ""District""
+                            from admin_afiliado As A 
+                            where A.Cedula = '" + id + "'";
 
             DataTable table = execquery(query);
 
