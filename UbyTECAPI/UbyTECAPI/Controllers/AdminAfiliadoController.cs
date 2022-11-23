@@ -64,8 +64,12 @@ namespace UbyTECAPI.Controllers
         {
             string query = @"select A.cedula as ""ID"",A.nombre as ""FirstN"",A.apellido1 as ""FirstLN"", A.apellido2 as ""SecondLN"",
                             A.correo as ""Email"", A.usuario as ""Username"",A.contra as ""Password"",
-                            A.provincia as ""Province"", A.canton as ""Canton"", A.distrito as ""District"", A.profilepic as ""ProfilePic""
-                            from admin_afiliado As A 
+                            A.provincia as ""Province"", A.canton as ""Canton"", A.distrito as ""District"", A.profilepic as ""ProfilePic"", t.""PhoneNum""
+                            from admin_afiliado As A left join 
+	                            (select distinct on (cedula_a) telefono as ""PhoneNum"", cedula_a 
+	                             from telefonos_admin_afiliado
+	                             order by cedula_a) as t
+                            on cedula_a = cedula 
                             where A.Cedula = '" + id + "'";
 
             DataTable table = execquery(query);
