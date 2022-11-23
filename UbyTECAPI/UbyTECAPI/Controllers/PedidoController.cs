@@ -6,13 +6,14 @@ using UbyTECAPI.Models;
 
 namespace UbyTECAPI.Controllers
 {
-    [Route("repartidor")]
+    [Route("cart-pedido")]
     [ApiController]
-    public class RepartidorController : ControllerBase
+    public class PedidoController : ControllerBase
     {
 
+
         private readonly IConfiguration _configuration;
-        public RepartidorController(IConfiguration configuration)
+        public PedidoController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -48,7 +49,7 @@ namespace UbyTECAPI.Controllers
         {
             string query = @"select cedula as ""ID"", nombre as ""FirstN"",apellido1 as ""FirstLN"",apellido2 as ""SecondLN"",
                             usuario as ""Username"",contra as ""Password"",correo as ""Email"", 
-                            provincia as ""Province"", canton as ""Canton"", distrito as ""District"", disponibilidad as ""Status"" 
+                            provincia as Province, canton as Canton, distrito as District, disponibilidad as ""Status""
                             from repartidor";
 
             DataTable table = execquery(query);
@@ -63,7 +64,7 @@ namespace UbyTECAPI.Controllers
         {
             string query = @"select cedula as ""ID"", nombre as ""FirstN"",apellido1 as ""FirstLN"",apellido2 as ""SecondLN"",
                             usuario as ""Username"",contra as ""Password"",correo as ""Email"", 
-                            provincia as ""Province"", canton as ""Canton"", distrito as ""District"", disponibilidad as ""Status"" 
+                            provincia as Province, canton as Canton, distrito as District, disponibilidad as ""Status"" 
                             from tipo_comercio
                              where cedula = '" + id + "';";
 
@@ -128,8 +129,6 @@ namespace UbyTECAPI.Controllers
             return new JsonResult("Delete Success");
 
         }
-
-
 
 
 

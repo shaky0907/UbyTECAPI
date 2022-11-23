@@ -6,13 +6,13 @@ using UbyTECAPI.Models;
 
 namespace UbyTECAPI.Controllers
 {
-    [Route("repartidor")]
+    [Route("cliente")]
     [ApiController]
-    public class RepartidorController : ControllerBase
+    public class ClienteController : ControllerBase
     {
 
         private readonly IConfiguration _configuration;
-        public RepartidorController(IConfiguration configuration)
+        public ClienteController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -47,9 +47,9 @@ namespace UbyTECAPI.Controllers
         public JsonResult Get()
         {
             string query = @"select cedula as ""ID"", nombre as ""FirstN"",apellido1 as ""FirstLN"",apellido2 as ""SecondLN"",
-                            usuario as ""Username"",contra as ""Password"",correo as ""Email"", 
-                            provincia as ""Province"", canton as ""Canton"", distrito as ""District"", disponibilidad as ""Status"" 
-                            from repartidor";
+                            fechanacim as ""BDate"",usuario as ""Username"",contra as ""Password"", telefono as ""PhoneNum"",
+                            provincia as Province, canton as Canton, distrito as District
+                            from cliente ";
 
             DataTable table = execquery(query);
 
@@ -62,10 +62,10 @@ namespace UbyTECAPI.Controllers
         public JsonResult Get(string id)
         {
             string query = @"select cedula as ""ID"", nombre as ""FirstN"",apellido1 as ""FirstLN"",apellido2 as ""SecondLN"",
-                            usuario as ""Username"",contra as ""Password"",correo as ""Email"", 
-                            provincia as ""Province"", canton as ""Canton"", distrito as ""District"", disponibilidad as ""Status"" 
-                            from tipo_comercio
-                             where cedula = '" + id + "';";
+                            fechanacim as ""BDate"",usuario as ""Username"",contra as ""Password"", telefono as ""PhoneNum"",
+                            provincia as ""Province"", canton as ""Canton"", distrito as ""District""
+                            from cliente 
+                            where cedula = '" + id + "';";
 
             DataTable table = execquery(query);
 
@@ -75,14 +75,14 @@ namespace UbyTECAPI.Controllers
 
         [HttpPost]
         [Route("guardar")]
-        public JsonResult Post(Repartidor rep)
+        public JsonResult Post(Cliente rep)
         {
             /*
             string query = @"insert into admleado 
                              ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Username + "','" + adm.Password + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + "'," + adm.ProfilePic + @")";
             */
-            string query = @"Insert into repartidor
-                             Values  ('" + rep.ID + "','" + rep.FirstN + "','" + rep.FirstLN + "','" + rep.SecondLN + "','" + rep.Username + "','" + rep.Password + "','" + rep.Email + "','" + rep.Province + "','" + rep.Canton + "','" + rep.District + "','" + rep.Status + @"');";
+            string query = @"Insert into cliente
+                             Values  ('" + rep.ID + "','" + rep.FirstN + "','" + rep.FirstLN + "','" + rep.SecondLN + "','" + rep.Username + "','" + rep.Password + "','" + rep.PhoneNum +"','" + rep.BDate +"','" + rep.Province + "','" + rep.Canton + "','" + rep.District + @"');";
 
             DataTable table = execquery(query);
 
@@ -93,10 +93,10 @@ namespace UbyTECAPI.Controllers
 
         [HttpPut]
         [Route("update")]
-        public JsonResult Put(Repartidor rep)
+        public JsonResult Put(Cliente rep)
         {
             string query = @"
-                        update repartidor set 
+                        update cliente set 
                         nombre = '" + rep.FirstN + @"',
                         apellido1 = '" + rep.FirstLN + @"',
                         apellido2 = '" + rep.SecondLN + @"',
@@ -105,7 +105,8 @@ namespace UbyTECAPI.Controllers
                         provincia = '" + rep.Province + @"',
                         canton = '" + rep.Canton + @"',
                         distrito = '" + rep.District + @"',
-                        disponibilidad = '" + rep.Status + @"'
+                        telefono = '" + rep.PhoneNum + @"',
+                        fechanacim = '" + rep.BDate + @"'
                         where cedula = '" + rep.ID + @"'
                         ";
 
@@ -120,7 +121,7 @@ namespace UbyTECAPI.Controllers
         [Route("delete/{id}")]
         public JsonResult Delete(string id)
         {
-            string query = @"delete from repartidor
+            string query = @"delete from cliente
                                  where cedula = '" + id + "'";
 
             DataTable table = execquery(query);
@@ -128,11 +129,6 @@ namespace UbyTECAPI.Controllers
             return new JsonResult("Delete Success");
 
         }
-
-
-
-
-
 
     }
 }
