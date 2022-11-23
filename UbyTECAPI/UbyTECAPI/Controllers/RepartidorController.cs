@@ -86,6 +86,8 @@ namespace UbyTECAPI.Controllers
 
             DataTable table = execquery(query);
 
+
+
             return new JsonResult("Insert Success");
 
         }
