@@ -60,13 +60,6 @@ namespace UbyTECAPI.Controllers
            
         }
 
-
-
-
-        
-
-
-
         [HttpGet]
         [Route("get/{username}/{password}")]
         public string Get(string username, string password)
@@ -100,9 +93,10 @@ namespace UbyTECAPI.Controllers
             {
                 Login login = new Login();
                 login.Type = "admin";
-
+                List<Login> lst = new List<Login>();
+                lst.Add(login);
                 
-                var jsonC = JsonConvert.SerializeObject(login, Formatting.Indented);
+                var jsonC = JsonConvert.SerializeObject(lst, Formatting.Indented);
                 return jsonC;
 
             }
@@ -115,9 +109,12 @@ namespace UbyTECAPI.Controllers
                 Login login = new Login();
                 login.Type = "cliente";
                 login.ID_client = af[0].ID;
-                
 
-                var jsonC = JsonConvert.SerializeObject(login, Formatting.Indented);
+
+                List<Login> lst = new List<Login>();
+                lst.Add(login);
+
+                var jsonC = JsonConvert.SerializeObject(lst, Formatting.Indented);
                 return jsonC;
 
             }
@@ -134,13 +131,19 @@ namespace UbyTECAPI.Controllers
                 login.ID_Affiliate = get_idA(af[0].ID);
                 login.ID_Admin = af[0].ID;
 
-                var jsonC = JsonConvert.SerializeObject(login, Formatting.Indented);
+                List<Login> lst = new List<Login>();
+                lst.Add(login);
+
+                var jsonC = JsonConvert.SerializeObject(lst, Formatting.Indented);
                 return jsonC;
             }
             else
             {
                 Login login = new Login();
-                var jsonC = JsonConvert.SerializeObject(login, Formatting.Indented);
+                List<Login> lst = new List<Login>();
+                lst.Add(login);
+
+                var jsonC = JsonConvert.SerializeObject(lst, Formatting.Indented);
                 return jsonC;
             }
 
