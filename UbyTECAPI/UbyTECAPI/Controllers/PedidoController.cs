@@ -243,22 +243,7 @@ namespace UbyTECAPI.Controllers
 
         }
 
-        [HttpPost]
-        [Route("guardar")]
-        public JsonResult Post(Repartidor rep)
-        {
-            /*
-            string query = @"insert into admleado 
-                             ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Username + "','" + adm.Password + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + "'," + adm.ProfilePic + @")";
-            */
-            string query = @"Insert into repartidor
-                             Values  ('" + rep.ID + "','" + rep.FirstN + "','" + rep.FirstLN + "','" + rep.SecondLN + "','" + rep.Username + "','" + rep.Password + "','" + rep.Email + "','" + rep.Province + "','" + rep.Canton + "','" + rep.District + "','" + rep.Status + @"');";
-
-            DataTable table = execquery(query);
-
-            return new JsonResult("Insert Success");
-
-        }
+       
 
 
 
@@ -299,6 +284,23 @@ namespace UbyTECAPI.Controllers
 
             string query = @"insert into productoxcarrito
                       values(" + ord.ID_producto + ", " + ord.ID_Carrito + "," + ord.Cantidad + ")";
+
+            execquery(query);
+
+            return new JsonResult("Insert Success");
+
+        }
+
+
+        [HttpPut]
+        [Route("updateP")]
+        public JsonResult updateP(NewOrder ord)
+        {
+
+
+            string query = @"update productosxcarrito set
+                             cantidad = "+ ord.Cantidad+@" 
+                             where id_producto = "+ ord.ID_producto +" and id_carrito = "+ ord.ID_Carrito + "";
 
             execquery(query);
 
