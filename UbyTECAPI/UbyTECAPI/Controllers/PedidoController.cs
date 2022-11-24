@@ -269,7 +269,7 @@ namespace UbyTECAPI.Controllers
 
             execquery(query);
 
-            return new JsonResult("Insert Success");
+            return new JsonResult(carrito[0].Num_Carrito);
 
         }
 
@@ -280,16 +280,9 @@ namespace UbyTECAPI.Controllers
         public JsonResult addproduct2cart(NewOrder ord)
         {
             
-            string query = @"select nume_carrito as ""Num_Carrito""
-                      from carrito
-                      order by num_carrito ASC";
 
-            DataTable table = execquery(query);
-            string jsonP = JsonConvert.SerializeObject(table);
-            List<Carrito> carrito = JsonConvert.DeserializeObject<List<Carrito>>(jsonP);
-
-            query = @"insert into productoxcarrito
-                      values(" + ord.ID_producto + ", " + carrito[0].Num_Carrito + "," + ord.Cantidad + ")";
+            string query = @"insert into productoxcarrito
+                      values(" + ord.ID_producto + ", " + ord.ID_Carrito + "," + ord.Cantidad + ")";
 
             execquery(query);
 
