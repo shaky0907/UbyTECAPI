@@ -98,7 +98,7 @@ namespace UbyTECAPI.Controllers
             
 
 
-            string query3 = @"select usuario, as ""Username"",contra as ""Password"",cedula as ""ID"",estado
+            string query3 = @"select usuario as ""Username"",contra as ""Password"",cedula as ""ID""
                              from admin_afiliado 
                              where usuario = '" + username + "'AND contra = '" + password + "'";
 
