@@ -220,9 +220,6 @@ namespace UbyTECAPI.Controllers
         public JsonResult Post(Afiliado adm)
         {
 
-
-
-            
             string query = @"Insert into afiliado 
                              Values  ('" + adm.ID + "','" + adm.AdminID + "'," + adm.Type.ToString() + ",'" + adm.Name + "','" + adm.Email + "','" + adm.SINPE + "','" + adm.Banner+"','" + adm.Province + "','" + adm.Canton + "','" + adm.District + @"');";
 

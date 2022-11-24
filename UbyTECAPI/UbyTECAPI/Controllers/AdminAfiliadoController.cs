@@ -12,20 +12,28 @@ namespace UbyTECAPI.Controllers
     public class AdminAfiliadoController : ControllerBase
     {
 
+
         private readonly IConfiguration _configuration;
         public AdminAfiliadoController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Ejecuta el query en la base de datos 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         private DataTable execquery(string query)
         {
+            //crear tabla
             DataTable table = new DataTable();
-
+            //estableces conexion
             string sqlDataSource = _configuration.GetConnectionString("UbyTecCon");
 
             NpgsqlDataReader myReader;
 
+            //ejecutar query
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 myCon.Open();
@@ -42,11 +50,15 @@ namespace UbyTECAPI.Controllers
             return table;
 
         }
-
+        /// <summary>
+        /// retorna todos los admin afiliados
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("get")]
         public JsonResult Get()
         {
+            //query
             string query = @"select A.cedula as ""ID"",A.nombre as ""FirstN"",A.apellido1 as ""FirstLN"", A.apellido2 as ""SecondLN"",
                             A.correo as ""Email"", A.usuario as ""Username"",A.contra as ""Password"",
                             A.provincia as ""Province"", A.canton as ""Canton"", A.distrito as ""District"", A.profilepic as ""ProfilePic""
@@ -58,10 +70,16 @@ namespace UbyTECAPI.Controllers
 
         }
 
+        /// <summary>
+        /// retorna admin afiliado por id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("get/{id}")]
         public JsonResult Get(string id)
         {
+            //query 
             string query = @"select A.cedula as ""ID"",A.nombre as ""FirstN"",A.apellido1 as ""FirstLN"", A.apellido2 as ""SecondLN"",
                             A.correo as ""Email"", A.usuario as ""Username"",A.contra as ""Password"",
                             A.provincia as ""Province"", A.canton as ""Canton"", A.distrito as ""District"", A.profilepic as ""ProfilePic"", t.""PhoneNum""

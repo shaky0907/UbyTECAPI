@@ -19,14 +19,21 @@ namespace UbyTECAPI.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Ejecuta el query en la base de datos 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         private DataTable execquery(string query)
         {
+            //crear tabla
             DataTable table = new DataTable();
-
+            //estableces conexion
             string sqlDataSource = _configuration.GetConnectionString("UbyTecCon");
 
             NpgsqlDataReader myReader;
 
+            //ejecutar query
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 myCon.Open();
@@ -243,8 +250,19 @@ namespace UbyTECAPI.Controllers
 
         }
 
-       
 
+        [HttpGet]
+        [Route("getRep/{id}")]
+        public JsonResult getRep(string id)
+        {
+            //query
+            string query = @"select cedula_r from pedido where id_pedido = '"+ id+"'";
+
+            DataTable table = execquery(query);
+
+            return new JsonResult(table);
+
+        }
 
 
 
@@ -296,7 +314,6 @@ namespace UbyTECAPI.Controllers
         [Route("updateP")]
         public JsonResult updateP(NewOrder ord)
         {
-
 
             string query = @"update productosxcarrito set
                              cantidad = "+ ord.Cantidad+@" 
