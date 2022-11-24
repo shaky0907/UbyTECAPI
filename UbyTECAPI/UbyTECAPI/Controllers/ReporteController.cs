@@ -74,10 +74,12 @@ namespace UbyTECAPI.Controllers
                 List<string> Af = new List<string>();
                 List<string> Pr = new List<string>();
                 List<string> Ser = new List<string>();
+                List<string> Tot = new List<string>();
 
                 Af.Add(vxp[0].Affiliate);                
                 Pr.Add(vxp[0].Products);
                 Ser.Add(vxp[0].Service);
+                Tot.Add(vxp[0].Total);
 
                 for (int i = 1; i < vxp.Count; i++)
                 {
@@ -86,6 +88,7 @@ namespace UbyTECAPI.Controllers
                         Af.Add(vxp[i].Affiliate);
                         Pr.Add(vxp[i].Products);
                         Ser.Add(vxp[i].Service);
+                        Tot.Add(vxp[i].Total);
                     }
                     else
                     {
@@ -94,17 +97,20 @@ namespace UbyTECAPI.Controllers
                         reporte.Affiliates = Af.ToArray();
                         reporte.Products = Pr.ToArray();
                         reporte.Servicio = Ser.ToArray();
+                        reporte.Totales = Tot.ToArray();
 
                         rps.Add(reporte);
 
                         Af = new List<string>();
                         Pr = new List<string>();
                         Ser = new List<string>();
+                        Tot = new List<string>();
 
                         cliente = vxp[i].Client;
                         Af.Add(vxp[i].Affiliate);
                         Pr.Add(vxp[i].Products);
                         Ser.Add(vxp[i].Service);
+                        Tot.Add(vxp[i].Total);
 
                     }
 
@@ -115,6 +121,7 @@ namespace UbyTECAPI.Controllers
                 reporte2.Affiliates = Af.ToArray();
                 reporte2.Products = Pr.ToArray();
                 reporte2.Servicio = Ser.ToArray();
+                reporte2.Totales = Tot.ToArray();
 
                 rps.Add(reporte2);
                 var jsonC = JsonConvert.SerializeObject(rps, Formatting.Indented);

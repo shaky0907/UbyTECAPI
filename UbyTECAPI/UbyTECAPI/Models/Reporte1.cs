@@ -6,5 +6,6 @@
         public string[] Affiliates { get; set; }
         public string[] Products { get; set; }
         public string[] Servicio { get; set; }
+        public string[] Totales { get; set; }
     }
 }
