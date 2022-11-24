@@ -497,7 +497,7 @@ namespace UbyTECAPI.Controllers
 
             query = @"select num_carrito as ""Num_Carrito""
                       from carrito
-                      order by num_carrito ASC";
+                      order by num_carrito DESC";
 
             DataTable table = execquery(query);
             string jsonP = JsonConvert.SerializeObject(table);
