@@ -60,6 +60,9 @@ namespace UbyTECAPI.Controllers
             return res.ToString();
         }
 
+
+        
+
         [HttpGet]
         [Route("get")]
         public JsonResult Get()
