@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using System.Data;
+using System.Text;
 using UbyTECAPI.Models;
 
 namespace UbyTECAPI.Controllers
@@ -40,6 +41,23 @@ namespace UbyTECAPI.Controllers
 
             return table;
 
+        }
+
+        /// <summary>
+        /// Crea un pasword random
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        private string CreatePassword(int length)
+        {
+            const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            StringBuilder res = new StringBuilder();
+            Random rnd = new Random();
+            while (0 < length--)
+            {
+                res.Append(valid[rnd.Next(valid.Length)]);
+            }
+            return res.ToString();
         }
 
         [HttpGet]
@@ -82,7 +100,7 @@ namespace UbyTECAPI.Controllers
                              ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Username + "','" + adm.Password + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + "'," + adm.ProfilePic + @")";
             */
             string query = @"Insert into cliente
-                             Values  ('" + rep.ID + "','" + rep.FirstN + "','" + rep.FirstLN + "','" + rep.SecondLN + "','" + rep.Username + "','" + rep.Password + "','" + rep.PhoneNum +"','" + rep.BDate +"','" + rep.Province + "','" + rep.Canton + "','" + rep.District + @"');";
+                             Values  ('" + rep.ID + "','" + rep.FirstN + "','" + rep.FirstLN + "','" + rep.SecondLN + "','" + rep.Username + "','" + CreatePassword(8) + "','" + rep.PhoneNum +"','" + rep.BDate +"','" + rep.Province + "','" + rep.Canton + "','" + rep.District + @"');";
 
             DataTable table = execquery(query);
 

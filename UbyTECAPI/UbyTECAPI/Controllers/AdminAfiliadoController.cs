@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using System.Data;
+using System.Text;
 using UbyTECAPI.Models;
 
 namespace UbyTECAPI.Controllers
@@ -50,6 +51,24 @@ namespace UbyTECAPI.Controllers
             return table;
 
         }
+
+        /// <summary>
+        /// Crea un pasword random
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        private string CreatePassword(int length)
+        {
+            const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            StringBuilder res = new StringBuilder();
+            Random rnd = new Random();
+            while (0 < length--)
+            {
+                res.Append(valid[rnd.Next(valid.Length)]);
+            }
+            return res.ToString();
+        }
+
         /// <summary>
         /// retorna todos los admin afiliados
         /// </summary>
@@ -109,7 +128,7 @@ namespace UbyTECAPI.Controllers
         {
            
             string query = @"Insert into admin_afiliado 
-                             Values  ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Email + "','" + adm.Username + "','" + adm.Password + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + "','" + adm.ProfilePic + @"');";
+                             Values  ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Email + "','" + adm.Username + "','" + CreatePassword(8) + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + "','" + adm.ProfilePic + @"');";
             
             execquery(query);
 
