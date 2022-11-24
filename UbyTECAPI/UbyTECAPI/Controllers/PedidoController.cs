@@ -103,9 +103,17 @@ namespace UbyTECAPI.Controllers
                 DataTable atable = execquery(query);
                 string jsonaf = JsonConvert.SerializeObject(atable);
                 List<Afiliado> af = JsonConvert.DeserializeObject<List<Afiliado>>(jsonaf);
-
-                order.RestID = af[0].ID;
-                order.RestName = af[0].Name;
+                try
+                {
+                    order.RestID = af[0].ID;
+                    order.RestName = af[0].Name;
+                }
+                catch (Exception)
+                {
+                    order.RestID = "";
+                    order.RestName = "";
+                }
+                
 
                 query = @"select estado as ""Estado""
                           from pedido
@@ -200,8 +208,16 @@ namespace UbyTECAPI.Controllers
                 string jsonaf = JsonConvert.SerializeObject(atable);
                 List<Afiliado> af = JsonConvert.DeserializeObject<List<Afiliado>>(jsonaf);
 
-                order.RestID = af[0].ID;
-                order.RestName = af[0].Name;
+                try
+                {
+                    order.RestID = af[0].ID;
+                    order.RestName = af[0].Name;
+                }
+                catch (Exception)
+                {
+                    order.RestID = "";
+                    order.RestName = "";
+                }
 
                 query = @"select estado as ""Estado""
                           from pedido
