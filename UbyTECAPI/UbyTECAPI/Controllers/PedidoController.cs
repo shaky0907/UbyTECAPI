@@ -276,36 +276,77 @@ namespace UbyTECAPI.Controllers
 
 
         [HttpPut]
-        [Route("update")]
-        public JsonResult Put(Repartidor rep)
+        [Route("add_product")]
+        public JsonResult addproduct2cart(NewOrder ord)
         {
-            string query = @"
-                        update repartidor set 
-                        nombre = '" + rep.FirstN + @"',
-                        apellido1 = '" + rep.FirstLN + @"',
-                        apellido2 = '" + rep.SecondLN + @"',
-                        usuario = '" + rep.Username + @"',
-                        contra = '" + rep.Password + @"',
-                        provincia = '" + rep.Province + @"',
-                        canton = '" + rep.Canton + @"',
-                        distrito = '" + rep.District + @"',
-                        disponibilidad = '" + rep.Status + @"'
-                        where cedula = '" + rep.ID + @"'
-                        ";
+            
+            string query = @"select nume_carrito as ""Num_Carrito""
+                      from carrito
+                      order by num_carrito ASC";
+
+            DataTable table = execquery(query);
+            string jsonP = JsonConvert.SerializeObject(table);
+            List<Carrito> carrito = JsonConvert.DeserializeObject<List<Carrito>>(jsonP);
+
+            query = @"insert into productoxcarrito
+                      values(" + ord.ID_producto + ", " + carrito[0].Num_Carrito + "," + ord.Cantidad + ")";
+
+            execquery(query);
+
+            return new JsonResult("Insert Success");
+
+        }
+
+
+
+        [HttpGet]
+        [Route("crear_pedido/{id}")]
+        public JsonResult createPedido(string id)
+        {
+            string query = @"call hacerpedido("+ id+")";
 
             DataTable table = execquery(query);
 
-            return new JsonResult("Update Success");
+            return new JsonResult("Crear pedido Success");
 
         }
+
+
+        [HttpGet]
+        [Route("alistar_pedido/{id}")]
+        public JsonResult alistarPedido(string id)
+        {
+            string query = @"call pedidoelaborado(" + id + ")";
+
+            DataTable table = execquery(query);
+
+            return new JsonResult("alistar pedido Success");
+
+        }
+
+
+        [HttpGet]
+        [Route("recibir_pedido/{id}")]
+        public JsonResult recibirPedido(string id)
+        {
+            string query = @"call pedidoentregado(" + id + ")";
+
+            DataTable table = execquery(query);
+
+            return new JsonResult("alistar pedido Success");
+
+        }
+
+
+
 
 
         [HttpDelete]
         [Route("delete/{id}")]
         public JsonResult Delete(string id)
         {
-            string query = @"delete from repartidor
-                                 where cedula = '" + id + "'";
+            string query = @"delete from pedido
+                             where id_pedido = " + id + "";
 
             DataTable table = execquery(query);
 

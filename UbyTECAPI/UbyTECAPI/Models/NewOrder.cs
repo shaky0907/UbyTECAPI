@@ -5,6 +5,7 @@
 
         public string ID_cliente { get; set; }
         public string ID_producto { get; set; }
+        public string ID_Carrito { get; set; }
         public string Cantidad { get; set; }
     }
 }
