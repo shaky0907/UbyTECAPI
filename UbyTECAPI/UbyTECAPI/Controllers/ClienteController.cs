@@ -100,10 +100,11 @@ namespace UbyTECAPI.Controllers
                              ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Username + "','" + adm.Password + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + "'," + adm.ProfilePic + @")";
             */
             string query = @"Insert into cliente
-                             Values  ('" + rep.ID + "','" + rep.FirstN + "','" + rep.FirstLN + "','" + rep.SecondLN + "','" + rep.Username + "','" + CreatePassword(8) + "','" + rep.PhoneNum +"','" + rep.BDate +"','" + rep.Province + "','" + rep.Canton + "','" + rep.District + @"');";
+                             Values  ('" + rep.ID + "','" + rep.FirstN + "','" + rep.FirstLN + "','" + rep.SecondLN + "','" + rep.Username + "','" + rep.Password + "','" + rep.PhoneNum +"','" + rep.BDate +"','" + rep.Province + "','" + rep.Canton + "','" + rep.District + @"');";
 
             DataTable table = execquery(query);
 
+            
             return new JsonResult("Insert Success");
 
         }

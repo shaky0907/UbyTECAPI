@@ -137,6 +137,9 @@ namespace UbyTECAPI.Controllers
 
             execquery(query);
 
+            Email email = new Email();
+            email.sendEmail(adm.Email, adm.Username, adm.Password).Wait();
+
             return new JsonResult("Insert Success");
 
         }
