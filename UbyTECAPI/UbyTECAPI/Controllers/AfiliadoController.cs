@@ -18,14 +18,21 @@ namespace UbyTECAPI.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Ejecuta el query en la base de datos 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         private DataTable execquery(string query)
         {
+            //crear tabla
             DataTable table = new DataTable();
-
+            //estableces conexion
             string sqlDataSource = _configuration.GetConnectionString("UbyTecCon");
 
             NpgsqlDataReader myReader;
 
+            //ejecutar query
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 myCon.Open();
@@ -44,6 +51,11 @@ namespace UbyTECAPI.Controllers
         }
 
 
+        /// <summary>
+        /// retorna el tipo de afiliado que es
+        /// </summary>
+        /// <param name="af"></param>
+        /// <returns></returns>
         private string get_tipo(Afiliado af)
         {
             string query2 = @"select id_tipo as ""ID"", nombre as ""Name"" from tipo_comercio where id_tipo = " + af.Type + ";";

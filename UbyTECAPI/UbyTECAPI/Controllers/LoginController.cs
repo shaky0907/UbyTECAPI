@@ -60,6 +60,25 @@ namespace UbyTECAPI.Controllers
            
         }
 
+        private string get_status(string id_admin)
+        {
+            string query2 = @"select sa.estado as ""Status""
+                                from afiliado as a, solicitud_afiliado as sa, admin_afiliado as af
+                                where a.cedula_j = sa.cedula_a and af.cedula = a.cedula_a and af.cedula = '" + id_admin + "';";
+            DataTable table2 = execquery(query2);
+            string json2 = JsonConvert.SerializeObject(table2);
+            List<Afiliado> af = JsonConvert.DeserializeObject<List<Afiliado>>(json2);
+            try
+            {
+                return af[0].Status;
+            }
+            catch (Exception)
+            {
+                return "";
+                throw;
+            }
+        }
+
         [HttpGet]
         [Route("get/{username}/{password}")]
         public string Get(string username, string password)
@@ -79,8 +98,8 @@ namespace UbyTECAPI.Controllers
             
 
 
-            string query3 = @"select usuario as ""Username"",contra as ""Password"",cedula as ""ID""
-                             from admin_afiliado
+            string query3 = @"select usuario, as ""Username"",contra as ""Password"",cedula as ""ID"",estado
+                             from admin_afiliado 
                              where usuario = '" + username + "'AND contra = '" + password + "'";
 
             DataTable table3 = execquery(query3);
@@ -131,6 +150,12 @@ namespace UbyTECAPI.Controllers
                 login.ID_Affiliate = get_idA(af[0].ID);
                 login.ID_Admin = af[0].ID;
 
+
+
+
+
+
+                login.ID_client = get_status(af[0].ID);
                 List<Login> lst = new List<Login>();
                 lst.Add(login);
 

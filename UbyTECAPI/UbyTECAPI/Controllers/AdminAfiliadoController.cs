@@ -64,6 +64,7 @@ namespace UbyTECAPI.Controllers
                             A.provincia as ""Province"", A.canton as ""Canton"", A.distrito as ""District"", A.profilepic as ""ProfilePic""
                             from admin_afiliado as A;";
 
+            //ejecutar query
             DataTable table = execquery(query);
 
             return new JsonResult(table);
@@ -90,20 +91,23 @@ namespace UbyTECAPI.Controllers
                             on cedula_a = cedula 
                             where A.Cedula = '" + id + "'";
 
+            //ejecutar query
             DataTable table = execquery(query);
 
             return new JsonResult(table);
 
         }
 
+        /// <summary>
+        /// inserta admin afiliado a la base de datos
+        /// </summary>
+        /// <param name="adm"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("guardar")]
         public JsonResult Post(AdminAfiliado adm)
         {
-            /*
-            string query = @"insert into admleado 
-                             ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Username + "','" + adm.Password + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + "'," + adm.ProfilePic + @")";
-            */
+           
             string query = @"Insert into admin_afiliado 
                              Values  ('" + adm.ID + "','" + adm.FirstN + "','" + adm.FirstLN + "','" + adm.SecondLN + "','" + adm.Email + "','" + adm.Username + "','" + adm.Password + "','" + adm.Province + "','" + adm.Canton + "','" + adm.District + "','" + adm.ProfilePic + @"');";
             
@@ -118,7 +122,11 @@ namespace UbyTECAPI.Controllers
 
         }
 
-
+        /// <summary>
+        /// hace update del admin afiliado
+        /// </summary>
+        /// <param name="adm"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("update")]
         public JsonResult Put(AdminAfiliado adm)
@@ -152,7 +160,11 @@ namespace UbyTECAPI.Controllers
 
         }
 
-
+        /// <summary>
+        /// eliminar admin afiliado
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("delete/{id}")]
         public JsonResult Delete(string id)
