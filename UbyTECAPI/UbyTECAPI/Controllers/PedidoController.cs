@@ -256,7 +256,7 @@ namespace UbyTECAPI.Controllers
 
             execquery(query);
 
-            query = @"select nume_carrito as ""Num_Carrito""
+            query = @"select num_carrito as ""Num_Carrito""
                       from carrito
                       order by num_carrito ASC";
 
